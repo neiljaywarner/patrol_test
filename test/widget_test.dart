@@ -7,24 +7,34 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-
+import 'package:patrol/patrol.dart';
 import 'package:patrol_test/main.dart';
 
+//initial file from sample gives 95% coverage with these lines
+// every line but main, 19 out of 20
+/*
+open coverage/html/index.html
+# Generate `coverage/lcov.info` file
+flutter test --coverage
+# Generate HTML report
+# Note: on macOS you need to have lcov installed on your system (`brew install lcov`) to use this:
+genhtml coverage/lcov.info -o coverage/html
+# Open the report
+open coverage/html/index.html
+ */
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
+  patrolTest('counter is incremented when plus button is tapped',
+      (PatrolTester $) async {
+    await $.pumpWidget(const MyApp());
 
     // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
-
+    expect($('0'), findsOneWidget);
+    expect($('1'), findsNothing);
     // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
+    await $(Icons.add).tap();
 
     // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+    expect($('1'), findsOneWidget);
+    expect($('0'), findsNothing);
   });
 }
